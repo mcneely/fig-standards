@@ -1,5 +1,4 @@
-Coding Style Guide
-==================
+# Coding Style Guide
 
 This guide extends and expands on [PSR-1], the basic coding standard.
 
@@ -22,8 +21,7 @@ interpreted as described in [RFC 2119].
 [PSR-1]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-1-basic-coding-standard.md
 
 
-1. Overview
------------
+## 1. Overview
 
 - Code MUST follow a "coding style guide" PSR [[PSR-1]].
 
@@ -68,7 +66,7 @@ use OtherVendor\OtherPackage\BazClass;
 
 class Foo extends Bar implements FooInterface
 {
-    public function sampleFunction($a, $b = null)
+    public function sampleMethod($a, $b = null)
     {
         if ($a === $b) {
             bar();
@@ -86,14 +84,13 @@ class Foo extends Bar implements FooInterface
 }
 ~~~
 
-2. General
-----------
+## 2. General
 
-### 2.1 Basic Coding Standard
+### 2.1. Basic Coding Standard
 
 Code MUST follow all rules outlined in [PSR-1].
 
-### 2.2 Files
+### 2.2. Files
 
 All PHP files MUST use the Unix LF (linefeed) line ending.
 
@@ -137,8 +134,7 @@ The PHP constants `true`, `false`, and `null` MUST be in lower case.
 
 
 
-3. Namespace and Use Declarations
----------------------------------
+## 3. Namespace and Use Declarations
 
 When present, there MUST be one blank line after the `namespace` declaration.
 
@@ -164,8 +160,7 @@ use OtherVendor\OtherPackage\BazClass;
 ~~~
 
 
-4. Classes, Properties, and Methods
------------------------------------
+## 4. Classes, Properties, and Methods
 
 The term "class" refers to all classes, interfaces, and traits.
 
@@ -361,8 +356,7 @@ $foo->bar(
 );
 ~~~
 
-5. Control Structures
----------------------
+## 5. Control Structures
 
 The general style rules for control structures are as follows:
 
@@ -491,8 +485,7 @@ try {
 }
 ~~~
 
-6. Closures
------------
+## 6. Closures
 
 Closures MUST be declared with a space after the `function` keyword, and a
 space before and after the `use` keyword.
@@ -543,7 +536,7 @@ $longArgs_noVars = function (
     $longerArgument,
     $muchLongerArgument
 ) {
-   // body
+    // body
 };
 
 $noArgs_longVars = function () use (
@@ -551,7 +544,7 @@ $noArgs_longVars = function () use (
     $longerVar2,
     $muchLongerVar3
 ) {
-   // body
+    // body
 };
 
 $longArgs_longVars = function (
@@ -563,7 +556,7 @@ $longArgs_longVars = function (
     $longerVar2,
     $muchLongerVar3
 ) {
-   // body
+    // body
 };
 
 $longArgs_shortVars = function (
@@ -571,7 +564,7 @@ $longArgs_shortVars = function (
     $longerArgument,
     $muchLongerArgument
 ) use ($var1) {
-   // body
+    // body
 };
 
 $shortArgs_longVars = function ($arg) use (
@@ -579,7 +572,7 @@ $shortArgs_longVars = function ($arg) use (
     $longerVar2,
     $muchLongerVar3
 ) {
-   // body
+    // body
 };
 ~~~
 
@@ -598,8 +591,7 @@ $foo->bar(
 ~~~
 
 
-7. Conclusion
---------------
+## 7. Conclusion
 
 There are many elements of style and practice intentionally omitted by this
 guide. These include but are not limited to:
@@ -622,8 +614,7 @@ Future recommendations MAY revise and extend this guide to address those or
 other elements of style and practice.
 
 
-Appendix A. Survey
-------------------
+## Appendix A. Survey
 
 In writing this style guide, the group took a survey of member projects to
 determine common practices.  The survey is retained herein for posterity.

@@ -1,5 +1,4 @@
-Extended Coding Style Guide
-===========================
+# Extended Coding Style Guide
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
 "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be
@@ -7,11 +6,10 @@ interpreted as described in [RFC 2119][].
 
 [RFC 2119]: http://tools.ietf.org/html/rfc2119
 
-1. Overview
------------
+## Overview
 
 This specification extends, expands and replaces [PSR-2][], the coding style guide and
-requires adherance to [PSR-1][], the basic coding standard.
+requires adherence to [PSR-1][], the basic coding standard.
 
 Like [PSR-2][], the intent of this specification is to reduce cognitive friction when
 scanning code from different authors. It does so by enumerating a shared set of rules
@@ -29,7 +27,7 @@ open to interpretation. This PSR therefore seeks to clarify the content of PSR-2
 a more modern context with new functionality available, and make the errata to PSR-2
 binding.
 
-### Overview
+### Previous language versions
 
 Throughout this document, any instructions MAY be ignored if they do not exist in versions
 of PHP supported by your project.
@@ -70,21 +68,20 @@ class Foo extends Bar implements FooInterface
 }
 ~~~
 
-2. General
-----------
+## 2. General
 
 ### 2.1 Basic Coding Standard
 
 Code MUST follow all rules outlined in [PSR-1].
 
 The term 'StudlyCaps' in PSR-1 MUST be interpreted as PascalCase where the first letter of
-each word is capitalised including the very first letter.
+each word is capitalized including the very first letter.
 
 ### 2.2 Files
 
-All PHP files MUST use the Unix LF (linefeed) line ending.
+All PHP files MUST use the Unix LF (linefeed) line ending only.
 
-All PHP files MUST end with a single line, containing only a single newline (LF) character.
+All PHP files MUST end with a non-blank line, terminated with a single LF.
 
 The closing `?>` tag MUST be omitted from files containing only PHP.
 
@@ -101,7 +98,7 @@ be split into multiple subsequent lines of no more than 80 characters each.
 There MUST NOT be trailing whitespace at the end of lines.
 
 Blank lines MAY be added to improve readability and to indicate related
-blocks of code except where explictly forbidden.
+blocks of code except where explicitly forbidden.
 
 There MUST NOT be more than one statement per line.
 
@@ -112,50 +109,47 @@ tabs for indenting.
 
 ### 2.5 Keywords and Types
 
-PHP [keywords][] MUST be in lower case.
+All PHP reserved keywords and types [[1]][keywords][[2]][types] MUST be in lower case.
 
-The PHP types and keywords `array`, `int`, `true`, `object`, `float`, `false`, `mixed`,
-`bool`, `null`, `numeric`, `string`, `void` and `resource` MUST be in lower case.
+Short form of type keywords MUST be used i.e. `bool` instead of `boolean`,
+`int` instead of `integer` etc.
 
-3. Declare Statements, Namespace, and Use Declarations
---------------------------------------------
+## 3. Declare Statements, Namespace, and Import Statements
 
-When present, there MUST be one blank line after the `declare` statement(s)
-e.g. `declare(ticks=);`
+The header of a PHP file may consist of a number of different blocks. If present,
+each of the blocks below MUST be separated by a single blank line, and MUST NOT contain
+a blank line. Each block MUST be in the order listed below, although blocks that are
+not relevant may be omitted.
 
-There MUST NOT be a blank line before declare statements such as those for strict
-types or ticks. They MUST be contained on the lines immediately following the
-opening tag (which must be on the first line when declare statement(s) are present).
+* File-level docblock.
+* One or more declare statements.
+* The namespace declaration of the file.
+* One or more class-based `use` import statements.
+* One or more function-based `use` import statements.
+* One or more constant-based `use` import statements.
+* The remainder of the code in the file.
 
-Each declare statement (e.g. `declare(ticks=);`) MUST be on its own line.
+When a file contains a mix of HTML and PHP, any of the above sections may still
+be used. If so, they MUST be present at the top of the file, even if the
+remainder of the code consists a closing PHP tag and then a mixture of HTML and
+PHP.
 
 When the opening `<?php` tag is on the first line of the file, it MUST be on its
 own line with no other statements unless it is a file containing markup outside of PHP
 opening and closing tags.
 
-When present, there MUST be one blank line after the `namespace` declaration.
+Import statements MUST never begin with a leading backslash as they
+must always be fully qualified.
 
-When present, the `namespace` declaration MUST be on its own line.
-
-When present, all `use` declarations MUST go after the `namespace`
-declaration.
-
-There MUST be one `use` keyword per declaration.
-
-Use statements MUST be in blocks, grouped by varying entity (classes [inc. interfaces and traits],
-functions or constants). To elaborate, this means that any and all classes are in a block
-together; any and all functions are in a block together; and any and all constants must
-be grouped together. Within each block there MUST be no blank lines. If a block has
-multiple lines there MUST be a blank line before the first line and a blank line after
-the last line.
-
-The groups MUST be ordered such that classes (together with interfaces and traits) are first,
-followed by functions and then constants.
-
-Example of the above notices about namespace, strict types and use declarations:
+The following example illustrates a complete list of all blocks:
 
 ~~~php
 <?php
+
+/**
+ * This file contains an example of coding styles.
+ */
+
 declare(strict_types=1);
 
 namespace Vendor\Package;
@@ -165,8 +159,14 @@ use Vendor\Package\Namespace\ClassD as D;
 use Vendor\Package\AnotherNamespace\ClassE as E;
 
 use function Vendor\Package\{functionA, functionB, functionC};
-use const Vendor\Package\{ConstantA, ConstantB, ConstantC};
+use function Another\Vendor\functionD;
 
+use const Vendor\Package\{CONSTANT_A, CONSTANT_B, CONSTANT_C};
+use const Another\Vendor\CONSTANT_D;
+
+/**
+ * FooBar is an example class.
+ */
 class FooBar
 {
     // ... additional PHP code ...
@@ -174,7 +174,7 @@ class FooBar
 
 ~~~
 
-Compound namespaces with a depth of two or more MUST not be used. Therefore the
+Compound namespaces with a depth of more than two MUST NOT be used. Therefore the
 following is the maximum compounding depth allowed:
 ~~~php
 <?php
@@ -199,12 +199,12 @@ use Vendor\Package\Namespace\{
 ~~~
 
 When wishing to declare strict types in files containing markup outside PHP
-opening and closing tags MUST, on the first line, include an opening php tag,
+opening and closing tags MUST, on the first line, include an opening PHP tag,
 the strict types declaration and closing tag.
 
 For example:
 ~~~php
-<?php declare(strict_types=1); ?>
+<?php declare(strict_types=1) ?>
 <html>
 <body>
     <?php
@@ -214,7 +214,8 @@ For example:
 </html>
 ~~~
 
-Declare statements MUST contain no spaces and MUST look like `declare(strict_types=1);`.
+Declare statements MUST contain no spaces and MUST be exactly `declare(strict_types=1)`
+(with an optional semi-colon terminator).
 
 Block declare statements are allowed and MUST be formatted as below. Note position of
 braces and spacing:
@@ -224,12 +225,11 @@ declare(ticks=1) {
 }
 ~~~
 
-4. Classes, Properties, and Methods
------------------------------------
+## 4. Classes, Properties, and Methods
 
 The term "class" refers to all classes, interfaces, and traits.
 
-Any closing brace must not be followed by any comment or statement on the
+Any closing brace MUST NOT be followed by any comment or statement on the
 same line.
 
 When instantiating a new class, parenthesis MUST always be present even when
@@ -306,7 +306,7 @@ class ClassName
 ~~~
 
 Each individual Trait that is imported into a class MUST be included
-one-per-line, and each inclusion MUST have its own `use` statement.
+one-per-line, and each inclusion MUST have its own `use` import statement.
 
 ~~~php
 <?php
@@ -324,8 +324,8 @@ class ClassName
 }
 ~~~
 
-When the class has nothing after the `use` declaration, the class
-closing brace MUST be on the next line after the `use` declaration.
+When the class has nothing after the `use` import statement, the class
+closing brace MUST be on the next line after the `use` import statement.
 
 ~~~php
 <?php
@@ -339,7 +339,7 @@ class ClassName
 }
 ~~~
 
-Otherwise it MUST have a blank line after the `use` declaration.
+Otherwise it MUST have a blank line after the `use` import statement.
 
 ~~~php
 <?php
@@ -355,16 +355,36 @@ class ClassName
 }
 ~~~
 
-### 4.3 Properties
+When using the `insteadof` and `as` operators they must be used as follows taking
+note of indentation, spacing and new lines.
+
+
+~~~php
+<?php
+
+class Talker
+{
+    use A, B, C {
+        B::smallTalk insteadof A;
+        A::bigTalk insteadof C;
+        C::mediumTalk as FooBar;
+    }
+}
+~~~
+
+### 4.3 Properties and Constants
 
 Visibility MUST be declared on all properties.
+
+Visibility MUST be declared on all constants if your project PHP minimum
+version supports constant visibilities (PHP 7.1 or later).
 
 The `var` keyword MUST NOT be used to declare a property.
 
 There MUST NOT be more than one property declared per statement.
 
 Property names MUST NOT be prefixed with a single underscore to indicate
-protected or private visibility.  That is, an underscore prefix explicitly has
+protected or private visibility. That is, an underscore prefix explicitly has
 no meaning.
 
 A property declaration looks like the following.
@@ -384,7 +404,7 @@ class ClassName
 Visibility MUST be declared on all methods.
 
 Method names MUST NOT be prefixed with a single underscore to indicate
-protected or private visibility.  That is, an underscore prefix explicitly has
+protected or private visibility. That is, an underscore prefix explicitly has
 no meaning.
 
 Method and function names MUST NOT be declared with a space after the method name. The
@@ -468,7 +488,7 @@ class ClassName
 ~~~
 
 When you have a return type declaration present there MUST be one space after
-the colon with followed by the type declaration. The colon and declaration MUST be
+the colon followed by the type declaration. The colon and declaration MUST be
 on the same line as the argument list closing parentheses with no spaces between
 the two characters. The declaration keyword (e.g. string) MUST be lowercase.
 
@@ -480,7 +500,33 @@ namespace Vendor\Package;
 
 class ReturnTypeVariations
 {
-    public function functionName($arg1, $arg2): string
+    public function functionName(int $arg1, $arg2): string
+    {
+        return 'foo';
+    }
+
+    public function anotherFunction(
+        string $foo,
+        string $bar,
+        int $baz
+    ): string {
+        return 'foo';
+    }
+}
+~~~
+
+In nullable type declarations there MUST NOT be a space between the question mark
+and the type.
+
+~~~php
+<?php
+declare(strict_types=1);
+
+namespace Vendor\Package;
+
+class ReturnTypeVariations
+{
+    public function functionName(?string $arg1, ?int $arg2): ?string
     {
         return 'foo';
     }
@@ -556,8 +602,7 @@ $app->get('/hello/{name}', function ($name) use ($app) {
 });
 ~~~
 
-5. Control Structures
----------------------
+## 5. Control Structures
 
 The general style rules for control structures are as follows:
 
@@ -600,7 +645,7 @@ keywords look like single words.
 
 A `switch` structure looks like the following. Note the placement of
 parentheses, spaces, and braces. The `case` statement MUST be indented once
-from `switch`, and the `break` keyword (or other terminating keyword) MUST be
+from `switch`, and the `break` keyword (or other terminating keywords) MUST be
 indented at the same level as the `case` body. There MUST be a comment such as
 `// no break` when fall-through is intentional in a non-empty `case` body.
 
@@ -695,11 +740,13 @@ try {
 }
 ~~~
 
-6. Operators
------------
+## 6. Operators
+
 All binary and ternary (but not unary) operators MUST be preceded and followed by at least
 one space. This includes all [arithmetic][], [comparison][], [assignment][], [bitwise][],
-[logical][] (excluding `!` which is unary), [string concatenation][], and [type][] operators.
+[logical][] (excluding `!` which is unary), [string concatenation][], [type][] operators,
+trait operators (`insteadof` and `as`), and the single pipe operator (e.g.
+`ExceptionType1 | ExceptionType2 $e`).
 
 Other operators are left undefined.
 
@@ -715,8 +762,7 @@ if ($a === $b) {
 }
 ~~~
 
-7. Closures
------------
+## 7. Closures
 
 Closures MUST be declared with a space after the `function` keyword, and a
 space before and after the `use` keyword.
@@ -824,8 +870,7 @@ $foo->bar(
 );
 ~~~
 
-8. Anonymous Classes
---------------------
+## 8. Anonymous Classes
 
 Anonymous Classes MUST follow the same guidelines and principles as closures
 in the above section.
@@ -863,6 +908,7 @@ $instance = new class extends \Foo implements
 [PSR-1]: http://www.php-fig.org/psr/psr-1/
 [PSR-2]: http://www.php-fig.org/psr/psr-2/
 [keywords]: http://php.net/manual/en/reserved.keywords.php
+[types]: https://secure.php.net/manual/en/reserved.other-reserved-words.php
 [arithmetic]: http://php.net/manual/en/language.operators.arithmetic.php
 [assignment]: http://php.net/manual/en/language.operators.assignment.php
 [comparison]: http://php.net/manual/en/language.operators.comparison.php

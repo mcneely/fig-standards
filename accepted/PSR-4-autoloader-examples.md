@@ -1,7 +1,7 @@
 Example Implementations of PSR-4
 ================================
 
-The following are examples illustrate PSR-4 compliant code:
+The following examples illustrate PSR-4 compliant code:
 
 Closure Example
 ---------------
@@ -347,3 +347,4 @@ class Psr4AutoloaderClassTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual);
     }
 }
+~~~

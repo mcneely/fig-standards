@@ -11,14 +11,6 @@ hypermedia link independently of the serialization format that is used. That in 
 a system to serialize a response with hypermedia links into one or more wire formats independently
 of the process of deciding what those links should be.
 
-### Open questions
-
-The following questions are still outstanding, in the opinion of the Editor, and should be resolved.
-
-* Should Href be a string, or can/should we use PSR-7 URI objects? I'm very very tempted to go with the latter.
-* Currently, technically, URL templates would be disallowed. That's a problem for, say, HAL. How do we want to square
-  that, especially if Href becomes an object?
-
 ## 2. Scope
 
 ### 2.1 Goals
@@ -35,12 +27,14 @@ formats.
 ### Why no mutator methods?
 
 One of the key targets for this specification is PSR-7 Response objects.  Response objects by design must be
-immutable.  Other value-object implementations likely would also require an immutable interface. Therefore,
-this specification focuses only on accessor methods that allow links to be extracted from a source object.
-How they got into that object is irrelevant.
+immutable.  Other value-object implementations likely would also require an immutable interface.
 
-In practice, immutable objects will likely incorporate with*()-style methods much like PSR-7 does. The definition
-of those interfaces is out of the scope of this specification, however.
+Additionally, some Link Provider objects may not be value objects but other objects within a given
+domain, which are able to generate Links on the fly, perhaps off of a database result or other underlying
+representation.  In those cases a writeable provider definition would be incompatible.
+
+Therefore, this specification splits accessor methods and evolvable methods into separate interfaces,
+allowing objects to implement just the read-only or evolvable versions as appropriate to their use case.
 
 ### Why is rel on a Link object multi-value?
 
@@ -52,7 +46,7 @@ A single LinkInterface object may be serialized to one or more link entries in a
 appropriate.  However, specifying multiple link objects each with a single rel yet the same URI is also legal, and
 a hypermedia format can serialize that as appropriate, too.
 
-### Why is a LinkCollectionInterface needed?
+### Why is a LinkProviderInterface needed?
 
 In many contexts, a set of links will be attached to some other object.  Those objects may be used in situations
 where all that is relevant is their links, or some subset of their links. For example, various different value
